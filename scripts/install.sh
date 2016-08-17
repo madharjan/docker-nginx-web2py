@@ -6,10 +6,9 @@ set -x
 NGINX_CONFIG_PATH=/build/config/nginx
 
 apt-get update
-apt-get upgrade -y --no-install-recommends
 
-rm /etc/nginx/conf.d/default.conf
-cp ${NGINX_CONFIG_PATH}/nginx-default.conf /etc/nginx/conf.d/default.conf
+# ONBUILD does this
+#cp ${NGINX_CONFIG_PATH}/default.conf /etc/nginx/conf.d/default.conf
 
 ## Install uwsgi and runit service
 /build/services/uwsgi/uwsgi.sh

@@ -1,4 +1,4 @@
-FROM madharjan/docker-nginx:1.4.6
+FROM madharjan/docker-nginx-onbuild:1.4.6
 MAINTAINER Madhav Raj Maharjan <madhav.maharjan@gmail.com>
 
 LABEL description="Docker container for Nginx with Web2py" os_version="Ubuntu 14.04"
