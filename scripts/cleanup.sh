@@ -1,7 +1,10 @@
 #!/bin/bash
 set -e
 source /build/config/buildconfig
-set -x
+
+if [ "$DEBUG" == true ]; then
+  set -x
+fi
 
 apt-get clean
 rm -rf /build

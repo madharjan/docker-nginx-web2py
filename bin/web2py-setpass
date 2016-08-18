@@ -1,0 +1,16 @@
+#!/usr/bin/env python
+
+import sys
+from gluon.main import save_password;
+
+def abort(message):
+	sys.stderr.write("%s\n" % message)
+	sys.exit(1)
+
+if len(sys.argv) < 2:
+	abort("Usage: web2py-setpass PASSWORD")
+
+password = sys.argv[1]
+
+save_password(password, 80)
+save_password(password, 443)

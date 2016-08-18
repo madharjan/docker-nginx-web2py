@@ -95,12 +95,69 @@ git push origin 2.14.6
 
 ## Run Container
 
-### Nginx with Web2py
+### Nginx with Web2py (include Admin, Example and Welcome)
 
-**Run `nginx-web2py` container**
+**Run `docker-nginx-web2py` container**
 ```
 docker run -d -t \
+  --name web2py \
+  madharjan/docker-nginx-web2py:2.14.6 /sbin/my_init
+```
+
+**Prepare folder on host for container volumes**
+```
+sudo mkdir -p /opt/docker/web2py/applications/
+sudo mkdir -p /opt/docker/web2py/log/
+```
+
+**Copy default application files to host**
+```
+sudo docker exec web2py tar Ccf /opt/web2py/applications - admin | tar Cxf /opt/docker/web2py/applications -
+sudo docker exec web2py tar Ccf /opt/web2py/applications - examples | tar Cxf /opt/docker/web2py/applications -
+sudo docker exec web2py tar Ccf /opt/web2py/applications - welcome | tar Cxf /opt/docker/web2py/applications -
+```
+
+**Run `docker-nginx-web2py` with applications**
+```
+docker stop web2py
+docker rm web2py
+
+docker run -d -t \
+  -e WEB2PY_ADMIN=Pa55word! \
   -p 80:80 \
   --name web2py \
   madharjan/docker-nginx-web2py:2.14.6 /sbin/my_init
+```
+
+### Nginx with Web2py Minimal
+
+**Run `docker-nginx-web2py-min` container**
+
+```
+docker run -d -t \
+  --name web2py \
+  madharjan/docker-nginx-web2py-min:2.14.6 /sbin/my_init
+```
+
+**Prepare folder on host for container volumes**
+```
+sudo mkdir -p /opt/docker/web2py/applications/
+sudo mkdir -p /opt/docker/web2py/log/
+```
+
+**Copy default application files to host**
+```
+sudo docker exec web2py tar Ccf /opt/web2py/applications - welcome | tar Cxf /opt/docker/web2py/applications -
+```
+
+**Run `docker-nginx-web2py` with applications**
+```
+docker stop web2py
+docker rm web2py
+
+docker run -d -t \
+  -e WEB2PY_ADMIN=Pa55word! \
+  -p 80:80 \
+  --name web2py \
+  madharjan/docker-nginx-web2py-min:2.14.6 /sbin/my_init
 ```
