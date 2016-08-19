@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
-source /build/config/buildconfig
+export LC_ALL=C
+export DEBIAN_FRONTEND=noninteractive
 
 if [ "$DEBUG" == true ]; then
   set -x
@@ -15,6 +16,10 @@ apt-get update
 
 ## Install uwsgi and runit service
 /build/services/uwsgi/uwsgi.sh
+
+if [ "$WEB2PY_MIN" == false ]; then
+  apt-get install -y --no-install-recommends git-core
+fi
 
 ## Install web2py
 cd /opt

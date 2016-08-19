@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
-source /build/config/buildconfig
+export LC_ALL=C
+export DEBIAN_FRONTEND=noninteractive
 
 if [ "$DEBUG" == true ]; then
   set -x
