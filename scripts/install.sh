@@ -19,6 +19,7 @@ apt-get update
 
 if [ "$WEB2PY_MIN" == false ]; then
   apt-get install -y --no-install-recommends git-core
+  pip install gitpython
 fi
 
 ## Install web2py

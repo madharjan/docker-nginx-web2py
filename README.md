@@ -125,8 +125,40 @@ docker rm web2py
 docker run -d -t \
   -e WEB2PY_ADMIN=Pa55word! \
   -p 80:80 \
+  -v /opt/docker/web2py/applications:/opt/web2py/applications \
+  -v /opt/docker/web2py/log:/var/log/nginx \
   --name web2py \
   madharjan/docker-nginx-web2py:2.14.6 /sbin/my_init
+```
+
+**Systemd Unit file**
+```
+[Unit]
+Description=Web2py Framework
+
+After=docker.service
+
+[Service]
+TimeoutStartSec=0
+
+ExecStartPre=-/bin/mkdir -p /opt/docker/web2py/applications
+ExecStartPre=-/bin/mkdir -p /opt/docker/web2py/log
+ExecStartPre=-/usr/bin/docker stop web2py
+ExecStartPre=-/usr/bin/docker rm web2py
+ExecStartPre=-/usr/bin/docker pull madharjan/docker-nginx-web2py:2.14.6
+
+ExecStart=/usr/bin/docker run \
+  -e WEB2PY_ADMIN=Pa55w0rd \
+  -p 172.17.0.1:8080:80 \
+  -v /opt/docker/web2py/applications:/opt/web2py/applications \
+  -v /opt/docker/web2py/log:/var/log/nginx \
+  --name  web2py \
+  madharjan/docker-nginx-web2py:2.14.6
+
+ExecStop=/usr/bin/docker stop -t 2 web2py
+
+[Install]
+WantedBy=multi-user.target
 ```
 
 ### Nginx with Web2py Minimal
@@ -156,7 +188,7 @@ docker stop web2py
 docker rm web2py
 
 docker run -d -t \
-  -e WEB2PY_ADMIN=Pa55word! \
+  -e WEB2PY_ADMIN=Pa55word \
   -p 80:80 \
   --name web2py \
   madharjan/docker-nginx-web2py-min:2.14.6 /sbin/my_init
