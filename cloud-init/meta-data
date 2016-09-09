@@ -1,7 +1,0 @@
-instance-id: iid-ubuntu-01
-local-hostname: localhost
-network-interfaces: |
-  auto lo
-  iface lo inet loopback
-  auto eth0
-  iface eth0 inet dhcp
