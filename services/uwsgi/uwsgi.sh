@@ -3,14 +3,20 @@ set -e
 export LC_ALL=C
 export DEBIAN_FRONTEND=noninteractive
 
-if [ "$DEBUG" == true ]; then
+if [ "${DEBUG}" == true ]; then
   set -x
 fi
 
 UWSGI_BUILD_PATH=/build/services/uwsgi
 
 ## Install Nginx.
-apt-get install -y --no-install-recommends build-essential python-dev libxml2-dev python-pip unzip
+apt-get install -y --no-install-recommends \
+  build-essential \
+  libxml2-dev \
+  python-dev \
+  python-pip \
+  unzip
+  
 pip install setuptools --no-use-wheel --upgrade
 PIPPATH=`which pip`
 $PIPPATH install --upgrade uwsgi

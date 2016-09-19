@@ -7,12 +7,12 @@ VERSION = 2.14.6
 all: build
 
 build:
-	docker build -t $(NAME):$(VERSION) --rm .
-	docker build --build-arg WEB2PY_MIN=true -t $(NAME)-min:$(VERSION) --rm .
+	docker build --build-arg WEB2PY_VERSION=$(VERSION) -t $(NAME):$(VERSION) --rm .
+	docker build --build-arg WEB2PY_VERSION=$(VERSION) --build-arg WEB2PY_MIN=true -t $(NAME)-min:$(VERSION) --rm .
 
 build_test:
-	docker build --build-arg DEBUG=true -t $(NAME):$(VERSION) --rm .
-	docker build --build-arg WEB2PY_MIN=true --build-arg DEBUG=true -t $(NAME)-min:$(VERSION) --rm .
+	docker build --build-arg WEB2PY_VERSION=$(VERSION) --build-arg DEBUG=true -t $(NAME):$(VERSION) --rm .
+	docker build --build-arg WEB2PY_VERSION=$(VERSION) --build-arg WEB2PY_MIN=true --build-arg DEBUG=true -t $(NAME)-min:$(VERSION) --rm .
 
 clean_images:
 	docker rmi $(NAME):latest $(NAME):$(VERSION) || true

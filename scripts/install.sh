@@ -3,7 +3,7 @@ set -e
 export LC_ALL=C
 export DEBIAN_FRONTEND=noninteractive
 
-if [ "$DEBUG" == true ]; then
+if [ "${DEBUG}" == true ]; then
   set -x
 fi
 
@@ -17,18 +17,18 @@ apt-get update
 ## Install uwsgi and runit service
 /build/services/uwsgi/uwsgi.sh
 
-if [ "$WEB2PY_MIN" == false ]; then
+if [ "${WEB2PY_MIN}" == false ]; then
   apt-get install -y --no-install-recommends git-core
   pip install gitpython
 fi
 
-## Install web2py
+## Install Web2py
 cd /opt
 wget http://web2py.com/examples/static/web2py_src.zip
 mkdir tmp
 unzip web2py_src.zip -d tmp
 
-if [ "$WEB2PY_MIN" == true ]; then
+if [ "${WEB2PY_MIN}" == true ]; then
   cd tmp/web2py
   python scripts/make_min_web2py.py ../../tmp/web2py-min
   mv ../../tmp/web2py-min ../../web2py

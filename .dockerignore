@@ -1,6 +1,4 @@
 *.md
-.vagrant
-cloud-init
 test
 LICENSE
 Makefile
