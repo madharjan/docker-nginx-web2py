@@ -1,4 +1,7 @@
 # docker-nginx-web2py
+
+[![](https://images.microbadger.com/badges/image/madharjan/docker-nginx-web2py.svg)](http://microbadger.com/images/madharjan/docker-nginx-web2py "Get your own image badge on microbadger.com")
+
 Docker container for Nginx with Web2py based on [madharjan/docker-nginx](https://github.com/madharjan/docker-nginx/)
 
 * Nginx 1.4.6 & Web2py 2.14.6 (docker-nginx-web2py)
