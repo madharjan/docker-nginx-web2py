@@ -33,3 +33,4 @@ release: test tag_latest
 	docker push $(NAME)
 	docker push $(NAME)-min
 	@echo "*** Don't forget to create a tag. git tag $(VERSION) && git push origin $(VERSION) ***"
+	curl -X POST https://hooks.microbadger.com/images/madharjan/docker-nginx-web2py/evcn6a67rZc_UychWDShxAocMnE=
