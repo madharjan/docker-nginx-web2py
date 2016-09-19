@@ -44,7 +44,7 @@ git push origin 1.4.6
 ```
 docker run -d -t \
   --name web2py \
-  madharjan/docker-nginx-web2py:2.14.6 /sbin/my_init
+  madharjan/docker-nginx-web2py:2.14.6
 ```
 
 **Prepare folder on host for container volumes**
@@ -71,7 +71,7 @@ docker run -d -t \
   -v /opt/docker/web2py/applications:/opt/web2py/applications \
   -v /opt/docker/web2py/log:/var/log/nginx \
   --name web2py \
-  madharjan/docker-nginx-web2py:2.14.6 /sbin/my_init
+  madharjan/docker-nginx-web2py:2.14.6
 ```
 
 **Systemd Unit file**
@@ -111,7 +111,7 @@ WantedBy=multi-user.target
 ```
 docker run -d -t \
   --name web2py \
-  madharjan/docker-nginx-web2py-min:2.14.6 /sbin/my_init
+  madharjan/docker-nginx-web2py-min:2.14.6
 ```
 
 **Prepare folder on host for container volumes**
@@ -134,7 +134,7 @@ docker run -d -t \
   -e WEB2PY_ADMIN=Pa55word \
   -p 80:80 \
   --name web2py \
-  madharjan/docker-nginx-web2py-min:2.14.6 /sbin/my_init
+  madharjan/docker-nginx-web2py-min:2.14.6
 ```
 
 **Systemd Unit file**
