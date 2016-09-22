@@ -7,12 +7,12 @@ if [ "${DEBUG}" == true ]; then
   set -x
 fi
 
-NGINX_CONFIG_PATH=/build/config/nginx
+NGINX_CONFIG_PATH=/build/config/nginx-web2py
 
 apt-get update
 
-# ONBUILD does this
-#cp ${NGINX_CONFIG_PATH}/default.conf /etc/nginx/conf.d/default.conf
+mkdir -p /config/etc/nginx-web2py/conf.d
+cp ${NGINX_CONFIG_PATH}/default-web2py.conf /config/etc/nginx-web2py/conf.d/default-web2py.conf
 
 ## Install uwsgi and runit service
 /build/services/uwsgi/uwsgi.sh
@@ -49,3 +49,6 @@ chown -R www-data:www-data web2py
 mkdir -p /etc/my_init.d
 cp /build/services/web2py-startup.sh /etc/my_init.d
 chmod 750 /etc/my_init.d/web2py-startup.sh
+
+mkdir -p /config/opt/web2py/applications
+cp -r /opt/web2py/applications/* /config/opt/web2py/applications

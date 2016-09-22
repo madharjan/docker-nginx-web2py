@@ -7,20 +7,53 @@ VERSION = 2.14.6
 all: build
 
 build:
-	docker build --build-arg WEB2PY_VERSION=$(VERSION) --build-arg VCS_REF=`git rev-parse --short HEAD` -t $(NAME):$(VERSION) --rm .
-	docker build --build-arg WEB2PY_VERSION=$(VERSION) --build-arg VCS_REF=`git rev-parse --short HEAD` --build-arg WEB2PY_MIN=true -t $(NAME)-min:$(VERSION) --rm .
+	docker build \
+		--build-arg WEB2PY_VERSION=$(VERSION) \
+		--build-arg VCS_REF=`git rev-parse --short HEAD` \
+		--build-arg WEB2PY_MIN=false \
+		--build-arg DEBUG=true \
+		-t $(NAME):$(VERSION) --rm .
 
-build_test:
-	docker build --build-arg WEB2PY_VERSION=$(VERSION) --build-arg VCS_REF=`git rev-parse --short HEAD` --build-arg DEBUG=true -t $(NAME):$(VERSION) --rm .
-	docker build --build-arg WEB2PY_VERSION=$(VERSION) --build-arg VCS_REF=`git rev-parse --short HEAD` --build-arg WEB2PY_MIN=true --build-arg DEBUG=true -t $(NAME)-min:$(VERSION) --rm .
+	docker build \
+		--build-arg WEB2PY_VERSION=$(VERSION) \
+		--build-arg VCS_REF=`git rev-parse --short HEAD` \
+		--build-arg WEB2PY_MIN=true \
+		--build-arg DEBUG=true \
+		-t $(NAME)-min:$(VERSION) --rm .
 
-clean_images:
-	docker rmi $(NAME):latest $(NAME):$(VERSION) || true
-	docker rmi $(NAME)-min:latest $(NAME)-min:$(VERSION) || true
+run:
+	mkdir -p ./test/applications/full
+	mkdir -p ./test/applications/min
 
-test:
-	env NAME=$(NAME) VERSION=$(VERSION) ./test/test.sh
-	env NAME=$(NAME)-min VERSION=$(VERSION) ./test/test.sh
+	docker run -d -t \
+		-e WEB2PY_ADMIN=Pa55word! \
+	  -v "`pwd`/test/applications/full":/opt/web2py/applications \
+		-e DEBUG=true \
+	  --name web2py -t $(NAME):$(VERSION)
+
+	docker run -d -t \
+	  -v "`pwd`/test/applications/min":/opt/web2py/applications \
+		-e DEBUG=true \
+	  --name web2py_min -t $(NAME)-min:$(VERSION)
+
+	docker run -d -t \
+		-e DISABLE_UWSGI=1 \
+		-e DEBUG=true \
+	  --name web2py_no_uwsgi -t $(NAME):$(VERSION)
+
+	docker run -d -t \
+		-e DISABLE_NGINX=1 \
+		-e DEBUG=true \
+	  --name web2py_no_nginx -t $(NAME):$(VERSION)
+
+tests:
+	./bats/bin/bats test/tests.bats
+
+clean:
+	docker stop web2py web2py_min web2py_no_nginx web2py_no_uwsgi || true
+	docker rm web2py web2py_min web2py_no_nginx web2py_no_uwsgi || true
+
+	sudo rm -rf ./test/applications
 
 tag_latest:
 	docker tag $(NAME):$(VERSION) $(NAME):latest
@@ -34,3 +67,7 @@ release: test tag_latest
 	docker push $(NAME)-min
 	@echo "*** Don't forget to create a tag. git tag $(VERSION) && git push origin $(VERSION) ***"
 	curl -X POST https://hooks.microbadger.com/images/madharjan/docker-nginx-web2py/evcn6a67rZc_UychWDShxAocMnE=
+
+clean_images:
+	docker rmi $(NAME):latest $(NAME):$(VERSION) || true
+	docker rmi $(NAME)-min:latest $(NAME)-min:$(VERSION) || true
