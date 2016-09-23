@@ -50,10 +50,10 @@ tests:
 	./bats/bin/bats test/tests.bats
 
 clean:
+	docker exec -t web2py /bin/bash -c "rm -rf /opt/web2py/applications/*" || true
+	docker exec -t web2py_min /bin/bash -c "rm -rf /opt/web2py/applications/*" || true
 	docker stop web2py web2py_min web2py_no_nginx web2py_no_uwsgi || true
 	docker rm web2py web2py_min web2py_no_nginx web2py_no_uwsgi || true
-
-	rm -rf ./test/applications
 
 tag_latest:
 	docker tag $(NAME):$(VERSION) $(NAME):latest
