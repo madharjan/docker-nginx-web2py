@@ -53,7 +53,7 @@ clean:
 	docker stop web2py web2py_min web2py_no_nginx web2py_no_uwsgi || true
 	docker rm web2py web2py_min web2py_no_nginx web2py_no_uwsgi || true
 
-	sudo rm -rf ./test/applications
+	rm -rf ./test/applications
 
 tag_latest:
 	docker tag $(NAME):$(VERSION) $(NAME):latest
