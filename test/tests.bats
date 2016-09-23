@@ -58,3 +58,51 @@
   run docker exec web2py_no_uwsgi /bin/bash -c "ps aux --forest | grep -v grep | grep '/usr/local/bin/uwsgi --ini uwsgi.ini'"
   [ "$status" -eq 1 ]
 }
+
+@test "checking request: status (welcome) web2py" {
+  run docker exec web2py /bin/bash -c "curl -I -s -L http://localhost/welcome | head -n 1 | cut -d$' ' -f2"
+  [ "$status" -eq 0 ]
+  [ "$output" -eq 200 ]
+}
+
+@test "checking request: content (welcome) web2py" {
+  run docker exec web2py /bin/bash -c "curl -s -L http://localhost/welcome | wc -l"
+  [ "$status" -eq 0 ]
+  [ "$output" -eq 160 ]
+}
+
+@test "checking request: status (examples) web2py" {
+  run docker exec web2py /bin/bash -c "curl -I -s -L http://localhost/examples | head -n 1 | cut -d$' ' -f2"
+  [ "$status" -eq 0 ]
+  [ "$output" -eq 200 ]
+}
+
+@test "checking request: content (examples) web2py" {
+  run docker exec web2py /bin/bash -c "curl -s -L http://localhost/examples | wc -l"
+  [ "$status" -eq 0 ]
+  [ "$output" -eq 132 ]
+}
+
+@test "checking request: status (admin) web2py" {
+  run docker exec web2py /bin/bash -c "curl -I -s -L http://localhost/admin | head -n 1 | cut -d$' ' -f2"
+  [ "$status" -eq 0 ]
+  [ "$output" -eq 200 ]
+}
+
+@test "checking request: content (admin) web2py" {
+  run docker exec web2py /bin/bash -c "curl -s -L http://localhost/admin | wc -l"
+  [ "$status" -eq 0 ]
+  [ "$output" -eq 185 ]
+}
+
+@test "checking request: status (welcome) web2py_min" {
+  run docker exec web2py_min /bin/bash -c "curl -I -s -L http://localhost/welcome | head -n 1 | cut -d$' ' -f2"
+  [ "$status" -eq 0 ]
+  [ "$output" -eq 200 ]
+}
+
+@test "checking request: content (welcome) web2py_min" {
+  run docker exec web2py_min /bin/bash -c "curl -s -L http://localhost/welcome"
+  [ "$status" -eq 0 ]
+  [ "$output" = "hello" ]
+}
