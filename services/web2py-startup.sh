@@ -39,6 +39,8 @@ else
   fi
 fi
 
+chown -R www-data:www-data /opt/web2py/applications
+
 if [ -z "${WEB2PY_ADMIN}" ]; then
   echo " WEB2PY_ADMIN not set, Admin application will be disabled"
 else

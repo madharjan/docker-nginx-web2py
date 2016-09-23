@@ -44,7 +44,7 @@ mv web2py/handlers/wsgihandler.py web2py/wsgihandler.py
 cp /build/bin/web2py-setpass /opt/web2py
 chmod 750 /opt/web2py/web2py-setpass
 
-chown -R www-data:www-data web2py
+chown -R www-data:www-data /opt/web2py
 
 mkdir -p /etc/my_init.d
 cp /build/services/web2py-startup.sh /etc/my_init.d
