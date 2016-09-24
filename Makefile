@@ -2,7 +2,7 @@
 NAME = madharjan/docker-nginx-web2py
 VERSION = 2.14.6
 
-.PHONY: all build build_test clean_images test tag_latest release
+.PHONY: all build run tests clean tag_latest release clean_images
 
 all: build
 
@@ -22,17 +22,18 @@ build:
 		-t $(NAME)-min:$(VERSION) --rm .
 
 run:
-	mkdir -p ./test/applications/full
-	mkdir -p ./test/applications/min
+	rm -rf /tmp/web2py
+	mkdir -p /tmp/web2py/full
+	mkdir -p /tmp/web2py/min
 
 	docker run -d -t \
 		-e WEB2PY_ADMIN=Pa55word! \
-	  -v "`pwd`/test/applications/full":/opt/web2py/applications \
+	  -v /tmp/web2py/full:/opt/web2py/applications \
 		-e DEBUG=true \
 	  --name web2py -t $(NAME):$(VERSION)
 
 	docker run -d -t \
-	  -v "`pwd`/test/applications/min":/opt/web2py/applications \
+	  -v /tmp/web2py/min:/opt/web2py/applications \
 		-e DEBUG=true \
 	  --name web2py_min -t $(NAME)-min:$(VERSION)
 
@@ -54,6 +55,7 @@ clean:
 	docker exec -t web2py_min /bin/bash -c "rm -rf /opt/web2py/applications/*" || true
 	docker stop web2py web2py_min web2py_no_nginx web2py_no_uwsgi || true
 	docker rm web2py web2py_min web2py_no_nginx web2py_no_uwsgi || true
+	rm -rf /tmp/web2py || true
 
 tag_latest:
 	docker tag $(NAME):$(VERSION) $(NAME):latest

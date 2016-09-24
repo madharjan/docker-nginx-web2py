@@ -10,7 +10,7 @@ DISABLE_UWSGI=${DISABLE_UWSGI:-0}
 WEB2PY_ADMIN=${WEB2PY_ADMIN:-}
 WEB2PY_MIN=${WEB2PY_MIN:-}
 
-if ! [ "${DISABLE_UWSGI}" -eq 0 ]; then
+if [ ! "${DISABLE_UWSGI}" -eq 0 ]; then
   touch /etc/service/uwsgi/down
 else
   rm -f /etc/service/uwsgi/down
