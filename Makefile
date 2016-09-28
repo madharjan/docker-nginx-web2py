@@ -19,40 +19,40 @@ build:
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
 		--build-arg WEB2PY_MIN=true \
 		--build-arg DEBUG=true \
-		-t $(NAME)-min:$(VERSION) --rm .
+		$(NAME)-min:$(VERSION) --rm .
 
 run:
 	rm -rf /tmp/web2py
 	mkdir -p /tmp/web2py/full
 	mkdir -p /tmp/web2py/min
 
-	docker run -d -t \
+	docker run -d \
 		-e WEB2PY_ADMIN=Pa55word! \
 	  -v /tmp/web2py/full:/opt/web2py/applications \
 		-e DEBUG=true \
-	  --name web2py -t $(NAME):$(VERSION)
+	  --name web2py $(NAME):$(VERSION)
 
-	docker run -d -t \
+	docker run -d \
 	  -v /tmp/web2py/min:/opt/web2py/applications \
 		-e DEBUG=true \
-	  --name web2py_min -t $(NAME)-min:$(VERSION)
+	  --name web2py_min $(NAME)-min:$(VERSION)
 
-	docker run -d -t \
+	docker run -d \
 		-e DISABLE_UWSGI=1 \
 		-e DEBUG=true \
-	  --name web2py_no_uwsgi -t $(NAME):$(VERSION)
+	  --name web2py_no_uwsgi $(NAME):$(VERSION)
 
-	docker run -d -t \
+	docker run -d \
 		-e DISABLE_NGINX=1 \
 		-e DEBUG=true \
-	  --name web2py_no_nginx -t $(NAME):$(VERSION)
+	  --name web2py_no_nginx $(NAME):$(VERSION)
 
 tests:
 	./bats/bin/bats test/tests.bats
 
 clean:
-	docker exec -t web2py /bin/bash -c "rm -rf /opt/web2py/applications/*" || true
-	docker exec -t web2py_min /bin/bash -c "rm -rf /opt/web2py/applications/*" || true
+	docker exec web2py /bin/bash -c "rm -rf /opt/web2py/applications/*" || true
+	docker exec web2py_min /bin/bash -c "rm -rf /opt/web2py/applications/*" || true
 	docker stop web2py web2py_min web2py_no_nginx web2py_no_uwsgi || true
 	docker rm web2py web2py_min web2py_no_nginx web2py_no_uwsgi || true
 	rm -rf /tmp/web2py || true

@@ -64,7 +64,7 @@ sudo mkdir -p /opt/docker/web2py/log/
 docker stop web2py
 docker rm web2py
 
-docker run -d -t \
+docker run -d \
   -e WEB2PY_ADMIN=Pa55word! \
   -p 80:80 \
   -v /opt/docker/web2py/applications:/opt/web2py/applications \
@@ -116,7 +116,7 @@ sudo mkdir -p /opt/docker/web2py/log/
 docker stop web2py
 docker rm web2py
 
-docker run -d -t \
+docker run -d \
   -e WEB2PY_ADMIN=Pa55word \
   -p 80:80 \
   -v /opt/docker/web2py/applications:/opt/web2py/applications \
