@@ -38,7 +38,7 @@ make clean
 # tag
 make tag_latest
 
-# update Makefile & Changelog.md
+# update Changelog.md
 # release
 make release
 ```

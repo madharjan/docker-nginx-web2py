@@ -7,6 +7,7 @@ if [ "${DEBUG}" == true ]; then
   set -x
 fi
 
+apt-get autoremove -y
 apt-get clean
 rm -rf /build
 rm -rf /tmp/* /var/tmp/*
