@@ -32,22 +32,31 @@ run:
 		-e DEBUG=true \
 	  --name web2py $(NAME):$(VERSION)
 
+	sleep 3
+
 	docker run -d \
 	  -v /tmp/web2py/min:/opt/web2py/applications \
 		-e DEBUG=true \
 	  --name web2py_min $(NAME)-min:$(VERSION)
+
+	sleep 2
 
 	docker run -d \
 		-e DISABLE_UWSGI=1 \
 		-e DEBUG=true \
 	  --name web2py_no_uwsgi $(NAME):$(VERSION)
 
+	sleep 2
+	
 	docker run -d \
 		-e DISABLE_NGINX=1 \
 		-e DEBUG=true \
 	  --name web2py_no_nginx $(NAME):$(VERSION)
 
+	sleep 2
+
 tests:
+	sleep 3
 	./bats/bin/bats test/tests.bats
 
 clean:
