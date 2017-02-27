@@ -16,8 +16,8 @@ apt-get install -y --no-install-recommends \
   python-dev \
   python-pip \
   unzip
-  
-pip install setuptools --no-use-wheel --upgrade
+
+pip install setuptools --upgrade
 PIPPATH=`which pip`
 $PIPPATH install --upgrade uwsgi
 

@@ -19,7 +19,7 @@ build:
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
 		--build-arg WEB2PY_MIN=true \
 		--build-arg DEBUG=true \
-		$(NAME)-min:$(VERSION) --rm .
+		-t $(NAME)-min:$(VERSION) --rm .
 
 run:
 	rm -rf /tmp/web2py
@@ -47,7 +47,7 @@ run:
 	  --name web2py_no_uwsgi $(NAME):$(VERSION)
 
 	sleep 2
-	
+
 	docker run -d \
 		-e DISABLE_NGINX=1 \
 		-e DEBUG=true \
