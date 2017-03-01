@@ -3,7 +3,7 @@ set -e
 export LC_ALL=C
 export DEBIAN_FRONTEND=noninteractive
 
-if [ "${DEBUG}" == true ]; then
+if [ "${DEBUG}" = true ]; then
   set -x
 fi
 
