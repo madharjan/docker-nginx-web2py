@@ -4,7 +4,12 @@
 
 Docker container for Nginx with Web2py based on [madharjan/docker-nginx](https://github.com/madharjan/docker-nginx/)
 
-* Nginx 1.4.6 & Web2py 2.14.6 (docker-nginx-web2py)
+**Features**
+* Environment variables to set admin password
+* Minimal (for production deploy) version of container `docker-nginx-web2py-min` for Web2py without `admin`, `example` and `welcome`
+* Bats ([sstephenson/bats](https://github.com/sstephenson/bats/)) based test cases
+
+## Nginx 1.4.6 & Web2py 2.14.6 (docker-nginx-web2py)
 
 **Environment**
 
