@@ -1,0 +1,15 @@
+
+branches:
+  only:
+  - master
+
+dist: trusty
+language: minimal
+
+jobs:
+  include:
+    - stage: release
+      script:
+      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      - make build DEBUG=false
+      - make release DEBUG=false
