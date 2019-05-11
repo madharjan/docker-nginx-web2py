@@ -175,7 +175,7 @@ WantedBy=multi-user.target
 | WEB2PY_ADMIN        |                  | Pa55w0rd                                                         |
 | WEB2PY_MIN          | true             | false                                                            |
 | PROJECT_GIT_REPO    |                  | [https://github.com/madharjan/web2py-contest](https://github.com/madharjan/web2py-contest)                                                           |
-| PROJECT_GIT_TAG     | HEAD             | v5.1.4                                                           |
+| PROJECT_GIT_TAG     | HEAD             | v1.0                                                             |
 
 ```bash
 docker run --rm -it \
@@ -187,7 +187,7 @@ docker run --rm -it \
   -e PROJECT_GIT_TAG=HEAD \
   madharjan/docker-nginx-web2py-min:2.18.5 \
   /bin/sh -c "web2py-systemd-unit" | \
-  sudo tee /etc/systemd/system/web2py.service
+  sudo tee /etc/systemd/system/web2py-app.service
 
 sudo systemctl enable web2py-app
 sudo systemctl start web2py-app

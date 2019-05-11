@@ -1,9 +1,8 @@
 
 NAME = madharjan/docker-nginx-web2py
-VERSION = 2.14.6
+VERSION = 2.18.5
 
 DEBUG ?= true
-NAME_MIN = madharjan/docker-nginx-web2py-min
 
 .PHONY: all build run tests stop clean tag_latest release clean_images
 
@@ -99,6 +98,7 @@ release: run tests clean tag_latest
 	docker push $(NAME)-min
 	@echo "*** Don't forget to create a tag. git tag $(VERSION) && git push origin $(VERSION) ***"
 	curl -s -X POST https://hooks.microbadger.com/images/$(NAME)/evcn6a67rZc_UychWDShxAocMnE=
+	curl -s -X POST https://hooks.microbadger.com/images/$(NAME)-min/CpU1SAWEalplATynvPpglQR7a04=
 
 clean_images:
 	docker rmi $(NAME):latest $(NAME):$(VERSION) || true
