@@ -185,6 +185,8 @@ docker run --rm -it \
   -e INSTALL_PROJECT=1 \
   -e PROJECT_GIT_REPO=https://github.com/madharjan/web2py-contest.git \
   -e PROJECT_GIT_TAG=HEAD \
+  -e WEB2PY_ADMIN=Pa55w0rd! \
+  -e WEB2PY_MIN=false \
   madharjan/docker-nginx-web2py-min:2.18.5 \
   /bin/sh -c "web2py-systemd-unit" | \
   sudo tee /etc/systemd/system/web2py-app.service
