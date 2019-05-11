@@ -15,10 +15,12 @@ apt-get install -y --no-install-recommends \
   libxml2-dev \
   python-dev \
   python-pip \
-  unzip
+  unzip \
+  rsync
 
 pip install setuptools --upgrade
 PIPPATH=`which pip`
+$PIPPATH install wheel
 $PIPPATH install --upgrade uwsgi
 
 mkdir -p /etc/uwsgi

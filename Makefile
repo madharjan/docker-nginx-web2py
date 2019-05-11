@@ -2,7 +2,10 @@
 NAME = madharjan/docker-nginx-web2py
 VERSION = 2.14.6
 
-.PHONY: all build run tests clean tag_latest release clean_images
+DEBUG ?= true
+NAME_MIN = madharjan/docker-nginx-web2py-min
+
+.PHONY: all build run tests stop clean tag_latest release clean_images
 
 all: build
 
@@ -11,14 +14,14 @@ build:
 		--build-arg WEB2PY_VERSION=$(VERSION) \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
 		--build-arg WEB2PY_MIN=false \
-		--build-arg DEBUG=true \
+		--build-arg DEBUG=$(DEBUG) \
 		-t $(NAME):$(VERSION) --rm .
 
 	docker build \
 		--build-arg WEB2PY_VERSION=$(VERSION) \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
 		--build-arg WEB2PY_MIN=true \
-		--build-arg DEBUG=true \
+		--build-arg DEBUG=$(DEBUG) \
 		-t $(NAME)-min:$(VERSION) --rm .
 
 run:
@@ -28,43 +31,62 @@ run:
 
 	docker run -d \
 		-e WEB2PY_ADMIN=Pa55word! \
-	  -v /tmp/web2py/full:/opt/web2py/applications \
-		-e DEBUG=true \
+		-v /tmp/web2py/full:/opt/web2py/applications \
+		-e DEBUG=$(DEBUG) \
 	  --name web2py $(NAME):$(VERSION)
 
 	sleep 3
 
 	docker run -d \
-	  -v /tmp/web2py/min:/opt/web2py/applications \
-		-e DEBUG=true \
-	  --name web2py_min $(NAME)-min:$(VERSION)
+		-v /tmp/web2py/min:/opt/web2py/applications \
+		-e DEBUG=$(DEBUG) \
+		--name web2py_min $(NAME)-min:$(VERSION)
 
 	sleep 2
 
 	docker run -d \
 		-e DISABLE_UWSGI=1 \
-		-e DEBUG=true \
-	  --name web2py_no_uwsgi $(NAME):$(VERSION)
+		-e DEBUG=$(DEBUG) \
+		--name web2py_no_uwsgi $(NAME):$(VERSION)
 
 	sleep 2
 
 	docker run -d \
 		-e DISABLE_NGINX=1 \
-		-e DEBUG=true \
-	  --name web2py_no_nginx $(NAME):$(VERSION)
+		-e DEBUG=$(DEBUG) \
+		--name web2py_no_nginx $(NAME):$(VERSION)
 
 	sleep 2
+
+	rm -rf /tmp/web2py/app
+	mkdir -p /tmp/web2py/app
+
+	docker run -d \
+		-p 8080:80 \
+		-e DEBUG=$(DEBUG) \
+		-e WEB2PY_ADMIN=Pa55word! \
+		-e INSTALL_PROJECT=1 \
+		-e PROJECT_GIT_REPO=https://github.com/madharjan/web2py-contest.git \
+		-e PROJECT_GIT_TAG=HEAD \
+		-v /tmp/tmp/web2py/app:/opt/web2py/applications  \
+		--name web2py_app $(NAME):$(VERSION) 
+
+	sleep 4
 
 tests:
 	sleep 3
 	./bats/bin/bats test/tests.bats
 
-clean:
+stop:
 	docker exec web2py /bin/bash -c "rm -rf /opt/web2py/applications/*" || true
 	docker exec web2py_min /bin/bash -c "rm -rf /opt/web2py/applications/*" || true
-	docker stop web2py web2py_min web2py_no_nginx web2py_no_uwsgi || true
-	docker rm web2py web2py_min web2py_no_nginx web2py_no_uwsgi || true
+	docker exec web2py_app /bin/bash -c "rm -rf /opt/web2py/applications/*" || true
+	docker stop web2py web2py_min web2py_no_nginx web2py_no_uwsgi web2py_app || true
+
+clean: stop
+	docker rm web2py web2py_min web2py_no_nginx web2py_no_uwsgi web2py_app || true
 	rm -rf /tmp/web2py || true
+	rm -rf /tmp/web2py_app || true
 
 tag_latest:
 	docker tag $(NAME):$(VERSION) $(NAME):latest
@@ -73,11 +95,10 @@ tag_latest:
 release: run tests clean tag_latest
 	@if ! docker images $(NAME) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(NAME) version $(VERSION) is not yet built. Please run 'make build'"; false; fi
 	@if ! docker images $(NAME)-min | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(NAME)-min version $(VERSION) is not yet built. Please run 'make build'"; false; fi
-	@if ! head -n 1 Changelog.md | grep -q 'release date'; then echo 'Please note the release date in Changelog.md.' && false; fi
 	docker push $(NAME)
 	docker push $(NAME)-min
 	@echo "*** Don't forget to create a tag. git tag $(VERSION) && git push origin $(VERSION) ***"
-	curl -X POST https://hooks.microbadger.com/images/madharjan/docker-nginx-web2py/evcn6a67rZc_UychWDShxAocMnE=
+	curl -s -X POST https://hooks.microbadger.com/images/$(NAME)/evcn6a67rZc_UychWDShxAocMnE=
 
 clean_images:
 	docker rmi $(NAME):latest $(NAME):$(VERSION) || true

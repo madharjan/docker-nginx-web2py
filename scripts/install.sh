@@ -47,8 +47,15 @@ chmod 750 /opt/web2py/web2py-setpass
 chown -R www-data:www-data /opt/web2py
 
 mkdir -p /etc/my_init.d
-cp /build/services/web2py-startup.sh /etc/my_init.d
-chmod 750 /etc/my_init.d/web2py-startup.sh
+
+cp /build/services/16-project.sh /etc/my_init.d
+chmod 750 /etc/my_init.d/16-project.sh
+
+cp /build/services/21-web2py.sh /etc/my_init.d
+chmod 750 /etc/my_init.d/21-web2py.sh
 
 mkdir -p /config/opt/web2py/applications
 cp -r /opt/web2py/applications/* /config/opt/web2py/applications
+
+cp /build/bin/web2py-systemd-unit /usr/local/bin
+chmod 750 /usr/local/bin/web2py-systemd-unit
