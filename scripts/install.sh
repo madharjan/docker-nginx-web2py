@@ -24,7 +24,7 @@ fi
 
 ## Install Web2py
 cd /opt
-wget http://web2py.com/examples/static/R-2.14.6.zip
+wget https://github.com/web2py/web2py/archive/R-2.14.6.zip
 mkdir tmp
 unzip R-2.14.6.zip -d tmp
 
