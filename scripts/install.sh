@@ -29,15 +29,15 @@ mkdir tmp
 unzip R-2.14.6.zip -d tmp
 
 if [ "${WEB2PY_MIN}" == true ]; then
-  cd tmp/web2py
+  cd tmp/web2py-R-2.14.6
   python scripts/make_min_web2py.py ../../tmp/web2py-min
   mv ../../tmp/web2py-min ../../web2py
   cd ../../
 else
-  mv tmp/web2py web2py
+  mv tmp/web2py-R-2.14.6 web2py
 fi
 
-rm web2py_src.zip
+rm R-2.14.6.zip.zip
 rm -rf tmp
 mv web2py/handlers/wsgihandler.py web2py/wsgihandler.py
 
