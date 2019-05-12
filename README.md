@@ -1,7 +1,7 @@
 # docker-nginx-web2py
 
-[![Build Status](https://travis-ci.com/madharjan/docker-nginx-web2py.svg?branch=master)](https://travis-ci.com/madharjan/docker-nginx)
-[![Layers](https://images.microbadger.com/badges/image/madharjan/docker-nginx-web2py.svg)](http://microbadger.com/images/madharjan/docker-nginx)
+[![Build Status](https://travis-ci.com/madharjan/docker-nginx-web2py.svg?branch=master)](https://travis-ci.com/madharjan/docker-nginx-web2py)
+[![Layers](https://images.microbadger.com/badges/image/madharjan/docker-nginx-web2py.svg)](http://microbadger.com/images/madharjan/docker-nginx-web2py)
 
 Docker container for Nginx with Web2py based on [madharjan/docker-nginx](https://github.com/madharjan/docker-nginx/)
 
@@ -11,7 +11,7 @@ Docker container for Nginx with Web2py based on [madharjan/docker-nginx](https:/
 * Minimal (for production deploy) version of container `docker-nginx-web2py-min` for Web2py without `admin`, `example` and `welcome`
 * Bats ([bats-core/bats-core](https://github.com/bats-core/bats-core)) based test cases
 
-## Nginx 1.10.3 & Web2py 2.18.5 (docker-nginx-web2py)
+## Nginx 1.10.3 & Web2py 2.18.3 (docker-nginx-web2py)
 
 ### Environment
 

@@ -1,6 +1,6 @@
 
 NAME = madharjan/docker-nginx-web2py
-VERSION = 2.18.5
+VERSION = 2.18.3
 
 DEBUG ?= true
 
@@ -61,7 +61,6 @@ run:
 	mkdir -p /tmp/web2py/app
 
 	docker run -d \
-		-p 8080:80 \
 		-e DEBUG=$(DEBUG) \
 		-e WEB2PY_ADMIN=Pa55word! \
 		-e INSTALL_PROJECT=1 \
