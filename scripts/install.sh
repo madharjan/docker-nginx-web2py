@@ -24,9 +24,9 @@ fi
 
 ## Install Web2py
 cd /opt
-wget http://web2py.com/examples/static/web2py_src.zip
+wget https://github.com/web2py/web2py/archive/R-2.14.6.zip
 mkdir tmp
-unzip web2py_src.zip -d tmp
+unzip R-2.14.6.zip -d tmp
 
 if [ "${WEB2PY_MIN}" == true ]; then
   cd tmp/web2py
