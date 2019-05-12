@@ -37,7 +37,7 @@ else
   mv tmp/web2py-R-2.14.6 web2py
 fi
 
-rm R-2.14.6.zip.zip
+rm R-2.14.6.zip
 rm -rf tmp
 mv web2py/handlers/wsgihandler.py web2py/wsgihandler.py
 
