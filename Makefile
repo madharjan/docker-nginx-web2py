@@ -85,6 +85,7 @@ clean: stop
 	docker rm web2py web2py_min web2py_no_nginx web2py_no_uwsgi web2py_app || true
 	rm -rf /tmp/web2py || true
 	rm -rf /tmp/web2py_app || true
+	docker images | grep "^<none>" | awk '{print$3 }' | xargs docker rmi || true
 
 tag_latest:
 	docker tag $(NAME):$(VERSION) $(NAME):latest
