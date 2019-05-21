@@ -17,12 +17,12 @@ else
 fi
 
 if [ -f "/etc/nginx/conf.d/default-web2py.conf" ]; then
-  echo "default-web2py.conf already exists"
+  echo "Web2py 'default-web2py.conf' already exists"
 else
   cp /config/etc/nginx-web2py/conf.d/default-web2py.conf /etc/nginx/conf.d/default-web2py.conf
 fi
 
-# delete default conf created by 20-nginx.sh
+# delete 'default.conf' created by 20-nginx.sh
 rm -f /etc/nginx/conf.d/default.conf
 
 if [ "${WEB2PY_MIN}" == true ]; then

@@ -15,7 +15,7 @@ ENV WEB2PY_MIN ${WEB2PY_MIN}
 RUN mkdir -p /build
 COPY . /build
 
-RUN /build/scripts/install.sh && /build/scripts/cleanup.sh
+RUN chmod 755 /build/scripts/*.sh && /build/scripts/install.sh && /build/scripts/cleanup.sh
 
 VOLUME ["/opt/web2py/applications", "/var/log/nginx"]
 

@@ -4,9 +4,20 @@ VERSION = 2.18.3
 
 DEBUG ?= true
 
-.PHONY: all build run tests stop clean tag_latest release clean_images
+DOCKER_USERNAME ?= $(shell read -p "DockerHub Username: " pwd; echo $$pwd)
+DOCKER_PASSWORD ?= $(shell stty -echo; read -p "DockerHub Password: " pwd; stty echo; echo $$pwd)
+DOCKER_LOGIN ?= $(shell cat ~/.docker/config.json | grep "docker.io" | wc -l)
+
+.PHONY: all build run test stop clean tag_latest release clean_images
 
 all: build
+
+docker_login:
+ifeq ($(DOCKER_LOGIN), 1)
+		@echo "Already login to DockerHub"
+else
+		@docker login -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
+endif
 
 build:
 	docker build \
@@ -24,6 +35,8 @@ build:
 		-t $(NAME)-min:$(VERSION) --rm .
 
 run:
+	@if ! docker images $(NAME) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(NAME) version $(VERSION) is not yet built. Please run 'make build'"; false; fi
+	
 	rm -rf /tmp/web2py
 	mkdir -p /tmp/web2py/full
 	mkdir -p /tmp/web2py/min
@@ -71,35 +84,36 @@ run:
 
 	sleep 4
 
-tests:
+test:
 	sleep 3
 	./bats/bin/bats test/tests.bats
 
 stop:
-	docker exec web2py /bin/bash -c "rm -rf /opt/web2py/applications/*" || true
-	docker exec web2py_min /bin/bash -c "rm -rf /opt/web2py/applications/*" || true
-	docker exec web2py_app /bin/bash -c "rm -rf /opt/web2py/applications/*" || true
-	docker stop web2py web2py_min web2py_no_nginx web2py_no_uwsgi web2py_app || true
+	docker exec web2py /bin/bash -c "rm -rf /opt/web2py/applications/*" 2> /dev/null || true
+	docker exec web2py_min /bin/bash -c "rm -rf /opt/web2py/applications/*" 2> /dev/null || true
+	docker exec web2py_app /bin/bash -c "rm -rf /opt/web2py/applications/*" 2> /dev/null || true
+	docker stop web2py web2py_min web2py_no_nginx web2py_no_uwsgi web2py_app 2> /dev/null || true
 
 clean: stop
-	docker rm web2py web2py_min web2py_no_nginx web2py_no_uwsgi web2py_app || true
+	docker rm web2py web2py_min web2py_no_nginx web2py_no_uwsgi web2py_app 2> /dev/null || true
 	rm -rf /tmp/web2py || true
 	rm -rf /tmp/web2py_app || true
-	docker images | grep "^<none>" | awk '{print$3 }' | xargs docker rmi || true
+	docker images | grep "<none>" | awk '{print$3 }' | xargs docker rmi 2> /dev/null || true
+
+publish: docker_login run test clean
+	docker push $(NAME)
 
 tag_latest:
 	docker tag $(NAME):$(VERSION) $(NAME):latest
 	docker tag $(NAME)-min:$(VERSION) $(NAME)-min:latest
 
-release: run tests clean tag_latest
-	@if ! docker images $(NAME) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(NAME) version $(VERSION) is not yet built. Please run 'make build'"; false; fi
-	@if ! docker images $(NAME)-min | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(NAME)-min version $(VERSION) is not yet built. Please run 'make build'"; false; fi
+release: docker_login  run test clean tag_latest
 	docker push $(NAME)
 	docker push $(NAME)-min
-	@echo "*** Don't forget to create a tag. git tag $(VERSION) && git push origin $(VERSION) ***"
-	curl -s -X POST https://hooks.microbadger.com/images/$(NAME)/evcn6a67rZc_UychWDShxAocMnE=
-	curl -s -X POST https://hooks.microbadger.com/images/$(NAME)-min/CpU1SAWEalplATynvPpglQR7a04=
 
-clean_images:
-	docker rmi $(NAME):latest $(NAME):$(VERSION) || true
-	docker rmi $(NAME)-min:latest $(NAME)-min:$(VERSION) || true
+clean_images: clean
+	docker rmi $(NAME):latest $(NAME):$(VERSION) 2> /dev/null || true
+	docker rmi $(NAME)-min:latest $(NAME)-min:$(VERSION) 2> /dev/null || true
+	docker logout 
+
+

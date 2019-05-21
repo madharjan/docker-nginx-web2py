@@ -1,23 +1,26 @@
 #!/bin/sh
 
-set e
+set -e
 
 if [ "${DEBUG}" = true ]; then
   set -x
 fi
 
+VERSION=2.18.3
+
 DEF_PORT=80
 DEF_VOLUME_HOME=/opt/docker
-DEF_VERSION=2.18.5
+DEF_NAME=web2py
 DEF_INSTALL_PROJECT=0
 DEF_PROJECT_GIT_REPO=
 DEF_PROJECT_GIT_TAG=
+
 DEF_WEB2PY_ADMIN=
 DEF_WEB2PY_MIN=true
 
 PORT=${PORT:-$DEF_PORT}
 VOLUME_HOME=${VOLUME_HOME:-$DEF_VOLUME_HOME}
-VERSION=${VERSION:-$DEF_VERSION}
+NAME=${NAME:-$DEF_NAME}
 
 INSTALL_PROJECT=${INSTALL_PROJECT:-$DEF_INSTALL_PROJECT}
 PROJECT_GIT_REPO=${PROJECT_GIT_REPO:-$DEF_PROJECT_GIT_REPO}
@@ -31,6 +34,12 @@ if [ "${WEB2PY_MIN}" = true ]; then
   IMAGE_NAME=docker-nginx-web2py-min
 fi
 
+if [ -z ${PORT} ]; then
+  PORT_LINE=""
+else 
+  PORT_LINE="-p ${PORT}:80 "
+fi
+
 /bin/cat <<-EOF
 [Unit]
 Description=Web2py Framework
@@ -40,24 +49,23 @@ After=docker.service
 [Service]
 TimeoutStartSec=0
 
-ExecStartPre=-/bin/mkdir -p ${VOLUME_HOME}/web2py/applications
-ExecStartPre=-/bin/mkdir -p ${VOLUME_HOME}/web2py/log
-ExecStartPre=-/usr/bin/docker stop web2py
-ExecStartPre=-/usr/bin/docker rm web2py
+ExecStartPre=-/bin/mkdir -p ${VOLUME_HOME}/${NAME}/applications
+ExecStartPre=-/bin/mkdir -p ${VOLUME_HOME}/${NAME}/log
+ExecStartPre=-/usr/bin/docker stop ${NAME}
+ExecStartPre=-/usr/bin/docker rm ${NAME}
 ExecStartPre=-/usr/bin/docker pull madharjan/${IMAGE_NAME}:${VERSION}
 
 ExecStart=/usr/bin/docker run \\
-  -p ${PORT}:80 \\
-  -e INSTALL_PROJECT=${INSTALL_PROJECT} \\
+  ${LINK_LINE}-e INSTALL_PROJECT=${INSTALL_PROJECT} \\
   -e PROJECT_GIT_REPO=${PROJECT_GIT_REPO} \\
   -e PROJECT_GIT_TAG=${PROJECT_GIT_TAG} \\
   -e WEB2PY_ADMIN=${WEB2PY_ADMIN} \\
-  -v /opt/docker/web2py/applications:/opt/web2py/applications \\
-  -v /opt/docker/web2py/log:/var/log/nginx \\
-  --name  web2py \\
+  -v /opt/docker/${NAME}/applications:/opt/web2py/applications \\
+  -v /opt/docker/${NAME}/log:/var/log/nginx \\
+  --name ${NAME} \\
   madharjan/${IMAGE_NAME}:${VERSION}
 
-ExecStop=/usr/bin/docker stop -t 2 web2py
+ExecStop=/usr/bin/docker stop -t 2 ${NAME}
 
 [Install]
 WantedBy=multi-user.target
