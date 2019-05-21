@@ -14,5 +14,5 @@ jobs:
       - make build DEBUG=false
       - make tag_latest DEBUG=false
       - make release DEBUG=false
-      - curl -s -X POST https://hooks.microbadger.com/images/${TRAVIS_REPO_SLUG}/evcn6a67rZc_UychWDShxAocMnE=
-      - curl -s -X POST https://hooks.microbadger.com/images/${TRAVIS_REPO_SLUG}-min/CpU1SAWEalplATynvPpglQR7a04="
+      - curl -s -X POST "https://hooks.microbadger.com/images/${TRAVIS_REPO_SLUG}/evcn6a67rZc_UychWDShxAocMnE="
+      - curl -s -X POST "https://hooks.microbadger.com/images/${TRAVIS_REPO_SLUG}-min/CpU1SAWEalplATynvPpglQR7a04="
