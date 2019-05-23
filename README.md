@@ -15,14 +15,14 @@ Docker container for Nginx with Web2py based on [madharjan/docker-nginx](https:/
 
 ### Environment
 
-| Variable             | Default | Example        |
-|----------------------|---------|----------------|
-| WEB2PY_ADMIN         |         | Pa55w0rd       |
-| DISABLE_UWSGI        | 0       | 1 (to disable) |
-|                      |         |                                                                  |
-| INSTALL_PROJECT      | 0       | 1 (to enable)                                                    |
-| PROJECT_GIT_REPO     |         | https://github.com/BlackrockDigital/startbootstrap-creative.git  |
-| PROJECT_GIT_TAG      | HEAD    | v5.1.4                                                           |
+| Variable             | Default | Example                                                                                    |
+|----------------------|---------|--------------------------------------------------------------------------------------------|
+| WEB2PY_ADMIN         |         | Pa55w0rd                                                                                   |
+| DISABLE_UWSGI        | 0       | 1 (to disable)                                                                             |
+|                      |         |                                                                                            |
+| INSTALL_PROJECT      | 0       | 1 (to enable)                                                                              |
+| PROJECT_GIT_REPO     |         | [https://github.com/madharjan/web2py-contest](https://github.com/madharjan/web2py-contest) |
+| PROJECT_GIT_TAG      | HEAD    | v5.1.4                                                                                     |
 
 ## Build
 
@@ -108,18 +108,18 @@ WantedBy=multi-user.target
 
 ## Generate Systemd Unit File
 
-| Variable             | Default          | Example                                                          |
-|----------------------|------------------|------------------------------------------------------------------|
-| PORT                 |                  | 8080                                                             |
-| VOLUME_HOME          | /opt/docker      | /opt/data                                                        |
-| NAME                 | ngnix            |                                                                  |
-|                      |                  |                                                                  |
-| WEB2PY_ADMIN         |                  | Pa55w0rd                                                         |
-| WEB2PY_MIN           | true             | false                                                            |
-|                      |                  |                                                                  |
-| INSTALL_PROJECT      | 0                | 1 (to enable)                                                    |
-| PROJECT_GIT_REPO     |                  | [https://github.com/madharjan/web2py-contest](https://github.com/madharjan/web2py-contest)                                                           |
-| PROJECT_GIT_TAG      | HEAD             | v1.0                                                             |
+| Variable             | Default          | Example                                                                                    |
+|----------------------|------------------|--------------------------------------------------------------------------------------------|
+| PORT                 |                  | 8080                                                                                       |
+| VOLUME_HOME          | /opt/docker      | /opt/data                                                                                  |
+| NAME                 | ngnix            |                                                                                            |
+|                      |                  |                                                                                            |
+| WEB2PY_ADMIN         |                  | Pa55w0rd                                                                                   |
+| WEB2PY_MIN           | true             | false                                                                                      |
+|                      |                  |                                                                                            |
+| INSTALL_PROJECT      | 0                | 1 (to enable)                                                                              |
+| PROJECT_GIT_REPO     |                  | [https://github.com/madharjan/web2py-contest](https://github.com/madharjan/web2py-contest) |
+| PROJECT_GIT_TAG      | HEAD             | v1.0                                                                                       |
 
 ### With deploy web projects
 
