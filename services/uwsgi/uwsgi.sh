@@ -9,17 +9,18 @@ fi
 
 UWSGI_BUILD_PATH=/build/services/uwsgi
 
-## Install Nginx.
+## Install uwsgi.
 apt-get install -y --no-install-recommends \
   build-essential \
   libxml2-dev \
-  python-dev \
-  python-pip \
+  python3-dev \
+  python3-pip \
   unzip \
   rsync
 
-pip install setuptools --upgrade
-PIPPATH=`which pip`
+PIPPATH=`which pip3`
+$PIPPATH install --upgrade "pip < 21.0"
+$PIPPATH install setuptools --upgrade
 $PIPPATH install wheel
 $PIPPATH install --upgrade uwsgi
 

@@ -11,7 +11,7 @@ Docker container for Nginx with Web2py based on [madharjan/docker-nginx](https:/
 * Minimal (for production deploy) version of container `docker-nginx-web2py-min` for Web2py without `admin`, `example` and `welcome`
 * Bats [bats-core/bats-core](https://github.com/bats-core/bats-core) based test cases
 
-## Nginx 1.10.3 & Web2py 2.18.3 (docker-nginx-web2py)
+## Nginx 1.10.3 & Web2py 2.21.1 (docker-nginx-web2py)
 
 ### Environment
 
@@ -60,7 +60,7 @@ docker run -d \
   -v /opt/docker/web2py/applications:/opt/web2py/applications \
   -v /opt/docker/web2py/log:/var/log/nginx \
   --name web2py \
-  madharjan/docker-nginx-web2py:2.18.5
+  madharjan/docker-nginx-web2py:2.21.1
 
 # run container
 # Web2py Minimal
@@ -70,7 +70,7 @@ docker run -d \
   -v /opt/docker/web2py/applications:/opt/web2py/applications \
   -v /opt/docker/web2py/log:/var/log/nginx \
   --name web2py \
-  madharjan/docker-nginx-web2py-min:2.18.5
+  madharjan/docker-nginx-web2py-min:2.21.1
 ```
 
 ## Systemd Unit File
@@ -90,7 +90,7 @@ ExecStartPre=-/bin/mkdir -p /opt/docker/web2py/applications
 ExecStartPre=-/bin/mkdir -p /opt/docker/web2py/log
 ExecStartPre=-/usr/bin/docker stop web2py
 ExecStartPre=-/usr/bin/docker rm web2py
-ExecStartPre=-/usr/bin/docker pull madharjan/docker-nginx-web2py:2.18.5
+ExecStartPre=-/usr/bin/docker pull madharjan/docker-nginx-web2py:2.21.1
 
 ExecStart=/usr/bin/docker run \
   -e WEB2PY_ADMIN=Pa55w0rd \
@@ -98,7 +98,7 @@ ExecStart=/usr/bin/docker run \
   -v /opt/docker/web2py/applications:/opt/web2py/applications \
   -v /opt/docker/web2py/log:/var/log/nginx \
   --name  web2py \
-  madharjan/docker-nginx-web2py:2.18.5
+  madharjan/docker-nginx-web2py:2.21.1
 
 ExecStop=/usr/bin/docker stop -t 2 web2py
 
@@ -127,13 +127,13 @@ WantedBy=multi-user.target
 docker run --rm \
   -e PORT=80 \
   -e VOLUME_HOME=/opt/docker \
-  -e VERSION=2.18.5 \
+  -e VERSION=2.21.1 \
   -e WEB2PY_ADMIN=Pa55w0rd \
   -e WEB2PY_MIN=false \
   -e INSTALL_PROJECT=1 \
   -e PROJECT_GIT_REPO=https://github.com/madharjan/web2py-contest.git \
   -e PROJECT_GIT_TAG=HEAD \
-  madharjan/docker-nginx-web2py-min:2.18.5 \
+  madharjan/docker-nginx-web2py-min:2.21.1 \
   web2py-systemd-unit | \
   sudo tee /etc/systemd/system/web2py.service
 

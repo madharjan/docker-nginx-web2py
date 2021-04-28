@@ -6,7 +6,7 @@ if [ "${DEBUG}" = true ]; then
   set -x
 fi
 
-VERSION=2.18.3
+VERSION=2.21.1
 
 DEF_PORT=80
 DEF_VOLUME_HOME=/opt/docker
