@@ -18,7 +18,7 @@ cp ${NGINX_CONFIG_PATH}/default-web2py.conf /config/etc/nginx-web2py/conf.d/defa
 /build/services/uwsgi/uwsgi.sh
 
 apt-get install -y --no-install-recommends git-core
-pip install gitpython
+pip3 install gitpython
 
 ## Install Web2py
 mkdir -p /opt/tmp
