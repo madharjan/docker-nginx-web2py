@@ -8,6 +8,7 @@ Docker container for Nginx with Web2py based on [madharjan/docker-nginx](https:/
 ## Features
 
 * Environment variables to set admin password
+* User-provided appconfig.ini file can be specified
 * Minimal (for production deploy) version of container `docker-nginx-web2py-min` for Web2py without `admin`, `example` and `welcome`
 * Bats [bats-core/bats-core](https://github.com/bats-core/bats-core) based test cases
 
@@ -15,14 +16,15 @@ Docker container for Nginx with Web2py based on [madharjan/docker-nginx](https:/
 
 ### Environment
 
-| Variable             | Default | Example                                                                                    |
-|----------------------|---------|--------------------------------------------------------------------------------------------|
-| WEB2PY_ADMIN         |         | Pa55w0rd                                                                                   |
-| DISABLE_UWSGI        | 0       | 1 (to disable)                                                                             |
-|                      |         |                                                                                            |
-| INSTALL_PROJECT      | 0       | 1 (to enable)                                                                              |
-| PROJECT_GIT_REPO     |         | [https://github.com/madharjan/web2py-contest](https://github.com/madharjan/web2py-contest) |
-| PROJECT_GIT_TAG      | HEAD    | v5.1.4                                                                                     |
+| Variable                  | Default | Example                                                                                    |
+|---------------------------|---------|--------------------------------------------------------------------------------------------|
+| WEB2PY_ADMIN              |         | Pa55w0rd                                                                                   |
+| DISABLE_UWSGI             | 0       | 1 (to disable)                                                                             |
+|                           |         |                                                                                            |
+| INSTALL_PROJECT           | 0       | 1 (to enable)                                                                              |
+| PROJECT_GIT_REPO          |         | [https://github.com/madharjan/web2py-contest](https://github.com/madharjan/web2py-contest) |
+| PROJECT_GIT_TAG           | HEAD    | v5.1.4                                                                                     |
+| PROJECT_APPCONFIG_INI_PATH|         | /etc/appconfig.ini                                                                         |
 
 ## Build
 
@@ -121,7 +123,7 @@ WantedBy=multi-user.target
 | PROJECT_GIT_REPO     |                  | [https://github.com/madharjan/web2py-contest](https://github.com/madharjan/web2py-contest) |
 | PROJECT_GIT_TAG      | HEAD             | v1.0                                                                                       |
 
-### With deploy web projects
+### To deploy web projects
 
 ```bash
 docker run --rm \
@@ -140,3 +142,10 @@ docker run --rm \
 sudo systemctl enable web2py
 sudo systemctl start web2py
 ```
+
+note that some projects may require an bespoke appconfig.ini file, e.g. to specify
+a database to be used with this docker instance. This can be done by mounting
+a fine in your docker image at (e.g.) /etc/appconfig.ini, then setting
+PROJECT_APPCONFIG_INI_PATH to this file path, from where it will be moved into
+the `private` directory of your web2py project, overwriting any existing
+appconfig.ini file in there.

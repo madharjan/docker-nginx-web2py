@@ -16,7 +16,10 @@ if [ ! "${INSTALL_PROJECT}" -eq 0 ]; then
     mkdir -p /opt/web2py/applications/${FOLDER}
     rsync -avh --remove-source-files --delete /var/www/html/* /opt/web2py/applications/${FOLDER}/
     find . -type d -empty -delete
-    
+    # If an alterative appconfig.ini file has been provided via an env var, use that
+    if [ -n "${PROJECT_APPCONFIG_INI_PATH}" ]; then
+      cp "${PROJECT_APPCONFIG_INI_PATH}" "/opt/web2py/applications/${FOLDER}/private/appconfig.ini"
+    fi
   fi
 
 fi
