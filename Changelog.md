@@ -1,3 +1,10 @@
+## 2.21.1
+
+### Changes
+
+* Use python3 throughout (v3.5)
+* Update to version 2.21.1
+
 ## 2.18.3
 
 ### Changes

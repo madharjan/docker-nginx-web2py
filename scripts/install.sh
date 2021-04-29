@@ -18,19 +18,19 @@ cp ${NGINX_CONFIG_PATH}/default-web2py.conf /config/etc/nginx-web2py/conf.d/defa
 /build/services/uwsgi/uwsgi.sh
 
 apt-get install -y --no-install-recommends git-core
-pip install gitpython
+pip3 install gitpython
 
 ## Install Web2py
 mkdir -p /opt/tmp
 cd /opt/tmp
-git clone https://github.com/web2py/web2py.git --depth 1 --branch R-2.18.3 --single-branch web2py
+git clone https://github.com/web2py/web2py.git --depth 1 --branch v2.21.1 --single-branch web2py
 cd web2py
 git submodule update --init --recursive
 cd ../../
 
 if [ "${WEB2PY_MIN}" == true ]; then
   cd tmp/web2py
-  python scripts/make_min_web2py.py ../../tmp/web2py-min
+  python3 scripts/make_min_web2py.py ../../tmp/web2py-min
   mv ../../tmp/web2py-min ../../web2py
   cd ../../
 else

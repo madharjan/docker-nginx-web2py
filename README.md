@@ -8,21 +8,23 @@ Docker container for Nginx with Web2py based on [madharjan/docker-nginx](https:/
 ## Features
 
 * Environment variables to set admin password
+* User-provided appconfig.ini file can be specified
 * Minimal (for production deploy) version of container `docker-nginx-web2py-min` for Web2py without `admin`, `example` and `welcome`
 * Bats [bats-core/bats-core](https://github.com/bats-core/bats-core) based test cases
 
-## Nginx 1.10.3 & Web2py 2.18.3 (docker-nginx-web2py)
+## Nginx 1.10.3 & Web2py 2.21.1 (docker-nginx-web2py)
 
 ### Environment
 
-| Variable             | Default | Example                                                                                    |
-|----------------------|---------|--------------------------------------------------------------------------------------------|
-| WEB2PY_ADMIN         |         | Pa55w0rd                                                                                   |
-| DISABLE_UWSGI        | 0       | 1 (to disable)                                                                             |
-|                      |         |                                                                                            |
-| INSTALL_PROJECT      | 0       | 1 (to enable)                                                                              |
-| PROJECT_GIT_REPO     |         | [https://github.com/madharjan/web2py-contest](https://github.com/madharjan/web2py-contest) |
-| PROJECT_GIT_TAG      | HEAD    | v5.1.4                                                                                     |
+| Variable                  | Default | Example                                                                                    |
+|---------------------------|---------|--------------------------------------------------------------------------------------------|
+| WEB2PY_ADMIN              |         | Pa55w0rd                                                                                   |
+| DISABLE_UWSGI             | 0       | 1 (to disable)                                                                             |
+|                           |         |                                                                                            |
+| INSTALL_PROJECT           | 0       | 1 (to enable)                                                                              |
+| PROJECT_GIT_REPO          |         | [https://github.com/madharjan/web2py-contest](https://github.com/madharjan/web2py-contest) |
+| PROJECT_GIT_TAG           | HEAD    | v5.1.4                                                                                     |
+| PROJECT_APPCONFIG_INI_PATH|         | /etc/appconfig.ini                                                                         |
 
 ## Build
 
@@ -60,7 +62,7 @@ docker run -d \
   -v /opt/docker/web2py/applications:/opt/web2py/applications \
   -v /opt/docker/web2py/log:/var/log/nginx \
   --name web2py \
-  madharjan/docker-nginx-web2py:2.18.5
+  madharjan/docker-nginx-web2py:2.21.1
 
 # run container
 # Web2py Minimal
@@ -70,7 +72,7 @@ docker run -d \
   -v /opt/docker/web2py/applications:/opt/web2py/applications \
   -v /opt/docker/web2py/log:/var/log/nginx \
   --name web2py \
-  madharjan/docker-nginx-web2py-min:2.18.5
+  madharjan/docker-nginx-web2py-min:2.21.1
 ```
 
 ## Systemd Unit File
@@ -90,7 +92,7 @@ ExecStartPre=-/bin/mkdir -p /opt/docker/web2py/applications
 ExecStartPre=-/bin/mkdir -p /opt/docker/web2py/log
 ExecStartPre=-/usr/bin/docker stop web2py
 ExecStartPre=-/usr/bin/docker rm web2py
-ExecStartPre=-/usr/bin/docker pull madharjan/docker-nginx-web2py:2.18.5
+ExecStartPre=-/usr/bin/docker pull madharjan/docker-nginx-web2py:2.21.1
 
 ExecStart=/usr/bin/docker run \
   -e WEB2PY_ADMIN=Pa55w0rd \
@@ -98,7 +100,7 @@ ExecStart=/usr/bin/docker run \
   -v /opt/docker/web2py/applications:/opt/web2py/applications \
   -v /opt/docker/web2py/log:/var/log/nginx \
   --name  web2py \
-  madharjan/docker-nginx-web2py:2.18.5
+  madharjan/docker-nginx-web2py:2.21.1
 
 ExecStop=/usr/bin/docker stop -t 2 web2py
 
@@ -121,22 +123,29 @@ WantedBy=multi-user.target
 | PROJECT_GIT_REPO     |                  | [https://github.com/madharjan/web2py-contest](https://github.com/madharjan/web2py-contest) |
 | PROJECT_GIT_TAG      | HEAD             | v1.0                                                                                       |
 
-### With deploy web projects
+### To deploy web projects
 
 ```bash
 docker run --rm \
   -e PORT=80 \
   -e VOLUME_HOME=/opt/docker \
-  -e VERSION=2.18.5 \
+  -e VERSION=2.21.1 \
   -e WEB2PY_ADMIN=Pa55w0rd \
   -e WEB2PY_MIN=false \
   -e INSTALL_PROJECT=1 \
   -e PROJECT_GIT_REPO=https://github.com/madharjan/web2py-contest.git \
   -e PROJECT_GIT_TAG=HEAD \
-  madharjan/docker-nginx-web2py-min:2.18.5 \
+  madharjan/docker-nginx-web2py-min:2.21.1 \
   web2py-systemd-unit | \
   sudo tee /etc/systemd/system/web2py.service
 
 sudo systemctl enable web2py
 sudo systemctl start web2py
 ```
+
+note that some projects may require an bespoke appconfig.ini file, e.g. to specify
+a database to be used with this docker instance. This can be done by mounting
+a fine in your docker image at (e.g.) /etc/appconfig.ini, then setting
+PROJECT_APPCONFIG_INI_PATH to this file path, from where it will be moved into
+the `private` directory of your web2py project, overwriting any existing
+appconfig.ini file in there.

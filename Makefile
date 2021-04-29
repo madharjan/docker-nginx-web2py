@@ -1,6 +1,6 @@
 
 NAME = madharjan/docker-nginx-web2py
-VERSION = 2.18.3
+VERSION = 2.21.1
 
 DEBUG ?= true
 
